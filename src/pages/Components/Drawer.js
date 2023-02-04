@@ -33,6 +33,8 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { Tooltip, Menu, MenuItem } from '@mui/material'
 import Logo from './img/t.png'
 import { useNavigate } from 'react-router-dom';
+import { getAuth, signOut } from "firebase/auth";
+import fireAccess from '../Auth/config/fb';
 
 const drawerWidth = 240;
 
@@ -108,12 +110,22 @@ export default function MiniDrawer({data}) {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [anchorElCred, setAnchorElCred] = React.useState(null);
 
+  const verify_signout = () => {
+    const auth = getAuth(fireAccess);
+      signOut(auth).then(() => {
+    // Sign-out successful.
+    navigate('/login', {replace: true})
+    }).catch((error) => {
+    // An error happened.
+    });
+  }
+
   const settings = [
-    { key : 1, title : 'Produtividade', icon : <BarChartIcon sx={{ fontSize: 35}}/> },
-    { key : 2, title : 'Comprar créditos', icon : <ShoppingCartIcon sx={{ fontSize: 35}}/> },
-    { key : 3, title : 'Meus dados', icon : <ManageAccountsIcon sx={{ fontSize: 35}}/> },
-    { key : 4, title : 'Suporte', icon : <ContactSupportIcon sx={{ fontSize: 35}}/> },
-    { key : 5, title : 'Sair', icon : <LogoutIcon sx={{ fontSize: 35}}/> }
+    { key : 1, title : 'Produtividade', icon : <BarChartIcon sx={{ fontSize: 35}}/>, bg : "rgb(3,169,244)", click : null },
+    { key : 2, title : 'Comprar créditos', icon : <ShoppingCartIcon sx={{ fontSize: 35}}/>, bg : "rgb(215, 217, 29)", click : null },
+    { key : 3, title : 'Meus dados', icon : <ManageAccountsIcon sx={{ fontSize: 35}}/>, bg : "grey", click: null },
+    { key : 4, title : 'Suporte', icon : <ContactSupportIcon sx={{ fontSize: 35}}/>, bg : "rgb(14,237,187)", click : null },
+    { key : 5, title : 'Sair', icon : <LogoutIcon sx={{ fontSize: 35}}/>, bg : "rgb(247,107,79)", click : verify_signout }
   ]
 
   const handleDrawerOpen = () => {
@@ -308,8 +320,8 @@ export default function MiniDrawer({data}) {
                       <Grid container sx={{  display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                         {settings.map((setting, index) => (
                           <Grid item xs={6} xl={6} key={index} sx={{ marginBlock: 1.5, marginInline: -0.4, alignItems: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column', display: 'flex' }}>
-                            <Box sx={{ p: 1.1, marginInline: -3, bgcolor: 'grey', borderRadius: 2 }}>
-                            <IconButton>
+                            <Box sx={{ p: 1.1, marginInline: -3, bgcolor: setting.bg, borderRadius: 2 }}>
+                            <IconButton onClick={setting.click}>
                               {setting.icon}
                               </IconButton>
                             </Box>

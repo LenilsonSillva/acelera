@@ -47,3 +47,7 @@ body {
   .btn_pointer {
     cursor: pointer;
   }
+
+  .MuiLinearProgress-bar {
+    transition: none;
+  }
